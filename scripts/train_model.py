@@ -3,7 +3,7 @@ import numpy as np
 from torch_geometric.loader import DataLoader
 import torch.nn.functional as F
 import sys
-sys.path.append("/home/shenchao/rtmscorepyg/code")
+sys.path.append("/work/cozzoli_creanza/GenScore")
 from GenScore.data.data import PDBbindDataset
 from GenScore.model.model import GenScore, GraphTransformer, GatedGCN
 from GenScore.model.utils import EarlyStopping, set_random_seed, run_a_train_epoch, run_an_eval_epoch, mdn_loss_fn
