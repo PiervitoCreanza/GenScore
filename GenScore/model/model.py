@@ -501,7 +501,7 @@ class GenScore(nn.Module):
 		self.dist_threhold = dist_threhold	
 	
 	def forward(self, data_ligand, data_target):
-		
+		device = 'cuda' if th.cuda.is_available() else 'cpu'
 		h_l = self.ligand_model(data_ligand)
 		h_t = self.target_model(data_target)
 		
@@ -529,7 +529,7 @@ class GenScore(nn.Module):
 		C = self.MLP(C)
 		
 		# Get batch indexes for ligand-target combined features
-		C_batch = th.tensor(range(B)).unsqueeze(-1).unsqueeze(-1)
+		C_batch = th.tensor(range(B)).unsqueeze(-1).unsqueeze(-1).to(device)
 		C_batch = C_batch.repeat(1, N_l, N_t)[C_mask]
 		
  		# Outputs
