@@ -1,0 +1,26 @@
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# Carica i dati dai file
+file1 = 'genscore_retrain_powerscoring_processed_score'
+file2 = 'GT_0.0_1_processed_score'
+
+data1 = pd.read_csv(file1, sep = '\t')
+data2 = pd.read_csv(file2, sep = '\t')
+
+# Estrai le colonne necessarie per lo scatter plot
+x_values = data1['score'] #useremo il retrained
+y_values = data2['score'] #useremo l'original
+
+# Crea lo scatter plot
+plt.scatter(x_values, y_values, marker='o', color='g', label='Value of convergence')
+
+# Personalizza il grafico
+plt.title('Power Scoring Scatter Plot \n GenScore Retrained vs GenScore Original')
+plt.xlabel('Retrained Values')
+plt.ylabel('GT_0.0.1 values')
+plt.grid(True)
+plt.legend()
+
+# Mostra il grafico
+plt.show()
