@@ -13,7 +13,7 @@ x_values = data1['score'] #useremo il retrained
 y_values = data2['score'] #useremo l'original
 
 # Crea lo scatter plot
-plt.scatter(x_values, y_values, marker='o', color='g', label='Value of convergence')
+plt.scatter(x_values, y_values, marker='o', color='g')
 
 # Personalizza il grafico
 plt.title('Power Scoring Scatter Plot \n GenScore Retrained vs GenScore Original')
