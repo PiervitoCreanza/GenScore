@@ -1,26 +1,34 @@
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 
-# Carica i dati dai file
+# Load data from file
 file1 = 'genscore_retrain_powerscoring_processed_score'
 file2 = 'GT_0.0_1_processed_score'
 
 data1 = pd.read_csv(file1, sep = '\t')
 data2 = pd.read_csv(file2, sep = '\t')
 
-# Estrai le colonne necessarie per lo scatter plot
-x_values = data1['score'] #useremo il retrained
-y_values = data2['score'] #useremo l'original
+# Extract necessary columns for scatter plot
+x_values = data1['score'] # retrained data
+y_values = data2['score'] # gt_0.0.1 model data
 
-# Crea lo scatter plot
-plt.scatter(x_values, y_values, marker='o', color='g')
+# Create scatter plot
+plt.scatter(x_values, y_values, marker='o', color='r')
 
-# Personalizza il grafico
+# Personalize the graph
 plt.title('Power Scoring Scatter Plot \n GenScore Retrained vs GenScore Original')
-plt.xlabel('Retrained Values')
+plt.xlabel('Retrained values')
 plt.ylabel('GT_0.0.1 values')
 plt.grid(True)
-plt.legend()
 
-# Mostra il grafico
+# Fit linear regression via least squares with numpy.polyfit
+# It returns an slope (b) and intercept (a)
+# deg = 1 means linear fit (i.e. polynomial of degree 1)
+b, a = np.polyfit(x_values, y_values, deg=1)
+
+# Plot regression line
+plt.plot(x_values, a + b * x_values, color="b", lw=2);
+
+# Plot scatter plot
 plt.show()
