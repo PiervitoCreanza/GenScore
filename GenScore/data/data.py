@@ -212,7 +212,10 @@ class VSDataset(Dataset):
 		else:
 			graphs = []
 			for lig in self.ligs:
-				graphs.append(self._mol_to_graph0(lig))
+				if lig is not None:
+					graphs.append(self._mol_to_graph0(lig))
+				else:
+					graphs.append(None)
 			return graphs
 	
 	def get_ligname(self, m):
