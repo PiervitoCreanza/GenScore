@@ -3,6 +3,7 @@ import torch as th
 from joblib import Parallel, delayed
 import pandas as pd
 import os, sys
+
 sys.path.append("/work/cozzoli_creanza/GenScore")
 import pickle
 from torch_geometric.loader import DataLoader
@@ -21,7 +22,8 @@ def validate_encoder_argument(val):
 def parse_user_input():
     p = argparse.ArgumentParser()
     p.add_argument('-d', '--dir', required=True,
-                   help='The path where the protein-ligand complexes are stored.')
+                   help='The path where the proteins are stored. It is suggested to use the proteins in the training '
+                        'set.')
     p.add_argument('--num_workers', type=int, default=10)
     p.add_argument('-csf', '--casf_path', required=True,
                    help='The path of the casf folder')
@@ -29,7 +31,7 @@ def parse_user_input():
                    help='The path of the model')
     p.add_argument('-c', '--cutoff', type=float, default=10.0,
                    help='the cutoff to determine the pocket')
-    p.add_argument('-o', '--outprefix', default="out",
+    p.add_argument('-o', '--outpath', default="out",
                    help='The output directory path.')
     p.add_argument('-usH', '--useH', default=False, action="store_true",
                    help='whether to use the explicit H atoms.')
@@ -131,10 +133,10 @@ def scoring(prot, lig, kwargs):
         model.load_state_dict(checkpoint['model_state_dict'])
         preds = run_an_eval_epoch(model, test_loader, pred=True, dist_threhold=kwargs.dist_threhold,
                                   device=kwargs.device)
-        print("Successfully scored {} and {}".format(prot, lig))
+        # print("Successfully scored {} and {}".format(prot, lig))
         return data.ids, preds
     except:
-        print("failed to score for {} and {}".format(prot, lig))
+        print("failed to score {} and {}".format(prot, lig))
         return None, None
 
 
@@ -142,15 +144,19 @@ def score_compound(pdbid, ligids, args):
     print("Starting scoring of %s ..." % pdbid)
     ids_list = []
     scores_list = []
-    for ligid in ligids:
-        ids, scores = scoring(prot="%s/%s/%s_pocket.ligen.pdb" % (args.dir, pdbid, pdbid),
-                              lig="%s/decoys_screening/%s/%s_%s.mol2" % (args.casf_path, pdbid, pdbid, ligid),
-                              kwargs=args
-                              )
 
-        if ids is not None and scores is not None:
-            ids_list.extend(ids)
-            scores_list.extend(scores)
+    with alive_bar(len(ligids)) as bar:
+        for ligid in ligids:
+            ids, scores = scoring(prot="%s/%s/%s_pocket.ligen.pdb" % (args.dir, pdbid, pdbid),
+                                  lig="%s/decoys_screening/%s/%s_%s.mol2" % (args.casf_path, pdbid, pdbid, ligid),
+                                  kwargs=args
+                                  )
+            print("Successfully scored {} and {}".format(pdbid, ligid))
+            if ids is not None and scores is not None:
+                ids_list.extend(ids)
+                scores_list.extend(scores)
+            bar()
+
     print("Scoring of %s finished." % pdbid)
     return pdbid, [ids_list, scores_list]
 
@@ -163,6 +169,7 @@ def get_directories_inside_dir(dir):
 
     return directories
 
+
 def intersection(lst1, lst2):
     lst3 = [value for value in lst1 if value in lst2]
     return lst3
@@ -173,28 +180,22 @@ def main():
     ligids_casfCoreSet = get_directories_inside_dir(os.path.join(args.casf_path, "coreset"))
     pdbids_casfDecoys = get_directories_inside_dir(os.path.join(args.casf_path, "decoys_screening"))
     pdbids_customSet = get_directories_inside_dir(args.dir)
-
+    #ligids_casfCoreSet = ligids_casfCoreSet[:1]
+    # intersecting_pdbids = intersection(pdbids_casfDecoys, pdbids_customSet)
     intersecting_pdbids = intersection(pdbids_casfDecoys, pdbids_customSet)
 
-    if args.parallel:
-        results = Parallel(n_jobs=-1, backend="threading")(
-            delayed(score_compound)(pdbid, ligids_casfCoreSet, args) for pdbid in intersecting_pdbids)
-    else:
-        results = []
-        with alive_bar(len(intersecting_pdbids)) as bar:
-            for pdbid in intersecting_pdbids:
-                results.append(score_compound(pdbid, ligids_casfCoreSet, args))
-                bar()
-    
-    outdir = os.path.join(args.casf_path, args.outprefix)
-    os.system("mkdir -p %s" % outdir)
-    for res in results:
-        pdbid = res[0]
+    # TODO: Rimuovere
+    # intersecting_pdbids = ["3gnw"]
+    os.system("mkdir -p %s" % args.outpath)
+    results = []
+    for pdbid in intersecting_pdbids:
+        res = score_compound(pdbid, ligids_casfCoreSet, args)
+        results.append(res)
         df = pd.DataFrame(zip(*res[1]), columns=["#code_ligand_num", "score"])
         df["#code_ligand_num"] = df["#code_ligand_num"].str.split("-").apply(lambda x: x[0])
-        df.to_csv("%s/%s_score.dat" % (outdir, pdbid), index=False, sep="\t")
+        df.to_csv("%s/%s_score.dat" % (args.outpath, pdbid), index=False, sep="\t")
 
-    with open("%s_screening.pkl" % args.outprefix, "wb") as dbFile:
+    with open("%s_screening.pkl" % args.outpath, "wb") as dbFile:
         pickle.dump(results, dbFile)
 
 

@@ -11,5 +11,3 @@ Various performance indicators for each target in the DEKOIS2.0 dataset.
 
 ### dude_metrics.xlsx
 various performance indicators for each target in the DUD-E dataset.
-
-

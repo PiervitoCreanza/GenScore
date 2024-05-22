@@ -1,0 +1,1 @@
+python3 train_model.py  --data_dir /work/cozzoli_creanza/output/graphs/ --data_prefix palermoSet_davideRefinedSet --model_path /work/cozzoli_creanza/output/trained_models/palermoSet_davideRefinedSet.pth
