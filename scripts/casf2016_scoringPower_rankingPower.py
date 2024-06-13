@@ -6,6 +6,12 @@ from scipy.stats import pearsonr
 from sklearn import linear_model
 from sklearn.metrics import mean_squared_error
 
+
+# This script prepares the data to perform the scoring power and ranking power tests.
+# The scoring power measursed the ability of a scoring function
+# to accurately predict the binding affinity of a protein-ligand complex.
+# The ranking power instead evaluates the ability to rank different complexes
+# based on their binding affinities.
 sys.path.append("/work/cozzoli_creanza/GenScore")
 from torch_geometric.loader import DataLoader
 from GenScore.data.data import PDBbindDataset
@@ -174,9 +180,7 @@ def main():
 if __name__ == "__main__":
     main()
 
-# This script prepares data to perform the scoring power test.
-# The scoring power measursed the ability of a scoring function
-# to accurately predict the binding affinity of a protein-ligand complex.
+
 
 '''
 -d

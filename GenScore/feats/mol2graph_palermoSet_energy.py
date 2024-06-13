@@ -334,12 +334,8 @@ def mol_to_graph2(prot_path, lig_path, cutoff=10.0, explicit_H=False, use_chiral
 
 
 def label_query(pdbid, args):
-    if args.refined_csv:
         energy = args.ref.loc[pdbid, 'energy_mean']
         return energy
-    else:
-        logKd = args.ref.loc[pdbid, "-logKd/Ki"]
-        return logKd
 
 def element_in_file(file_path, element):
     with open(file_path, 'r') as file:
@@ -368,7 +364,7 @@ def pdbbind_handle(pdbid, args):
                                explicit_H=args.useH,
                                use_chirality=args.use_chirality)
     except:
-        print("%s failed to generate the graph"%pdbid)
+        print("%s failed to generare the graph"%pdbid)
         gp, gl = None, None
         # gm = None
     return pdbid, gp, gl, label_query(pdbid, args)
@@ -453,3 +449,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+"""
+python3 /work/cozzoli_creanza/GenScore/GenScore/feats/mol2graph_palermoSet_energy.py -p -uschi -d /work/cozzoli_creanza/data/refined-set -ds -r /work/cozzoli_creanza/input/Palermo_training-set.csv -fs /work/cozzoli_creanza/input/Palermo_training-set.csv -o /work/cozzoli_creanza/output/graphs/palermoSet_energy/palermoSet_energy -rc /work/cozzoli_creanza/input/INDEX_refined_data_2020_list_sorted.txt -dg /work/cozzoli_creanza/input/missing-prots
+"""
