@@ -1,1 +1,5 @@
+first_retrain.pth: First retrained model with -logKd/Ki labels but different protein pockets cutouts
 
+palermoSet_energy.pth: Second retrained model with energy labels
+
+palermoSet_logKd.pth: Second retrained model with -logKd/Ki labels
