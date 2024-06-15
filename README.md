@@ -13,7 +13,7 @@ protein pockets, thus increasing its versatility and applicability in various sc
 that the results of this project, in our small contribution, may have significant implications for future
 research in the field of bioinformatics and computational chemistry.
 
-Read the full article here: [# Machine Learning for drug-target interaction estimation in Drug Discovery: from replication to data integration analysis]([https://link-url-here.org](https://polimi365-my.sharepoint.com/:b:/g/personal/10794727_polimi_it/EYnD7tjC1WdHrdeqHlCMQBcBPoxH7huPWohWtePMqVRNMQ?e=Hnh30a))
+Read the full article here: [Machine Learning for drug-target interaction estimation in Drug Discovery: from replication to data integration analysis](https://polimi365-my.sharepoint.com/:b:/g/personal/10794727_polimi_it/EYnD7tjC1WdHrdeqHlCMQBcBPoxH7huPWohWtePMqVRNMQ?e=Hnh30a)
 
 ---
 # GenScore (Original)
