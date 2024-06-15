@@ -1,0 +1,3 @@
+epoch 335/5000, total_loss_val 1.0166, mdn_loss_val 1.3534, affi_loss_val 0.6737, atom_loss_val 0.0138, bond_loss_val 0.0413, best validation 1.0099
+total_loss_train:1.2752516786056163, mdn_loss_train:1.2431733939378529, affi_loss_train:-0.06403681245604723, atom_loss_train:0.01393184178219787, bond_loss_train:0.04594659529112537
+total_loss_val:1.0098786119508099, mdn_loss_val:1.3521482053600653, affi_loss_val:0.6846518091115725, atom_loss_val:0.014185492888092994, bond_loss_val:0.042125650872786836

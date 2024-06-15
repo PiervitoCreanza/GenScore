@@ -16,7 +16,7 @@ if __name__ == '__main__':
 	import argparse
 	p = argparse.ArgumentParser()
 	p.add_argument('--num_epochs', type=int, default=5000)
-	p.add_argument('--batch_size', type=int, default=64) 
+	p.add_argument('--batch_size', type=int, default=64)
 	p.add_argument('--aux_weight', type=float, default=0.001)
 	p.add_argument('--affi_weight', type=float, default=-0.5)
 	p.add_argument('--patience', type=int, default=70)
@@ -32,7 +32,7 @@ if __name__ == '__main__':
 	p.add_argument('--data_prefix', type=str, default="v2020_train")
 	p.add_argument('--valnum', type=int, default=1500)
 	p.add_argument('--seeds', type=int, default=126)
-	p.add_argument('--hidden_dim0', type=int, default=128)
+	p.add_argument('--hidden_dim0', type=int, default=128) # Colonna matrice 2
 	p.add_argument('--hidden_dim', type=int, default=128)
 	p.add_argument('--n_gaussians', type=int, default=10)
 	p.add_argument('--dropout_rate', type=float, default=0.15)
@@ -41,12 +41,12 @@ if __name__ == '__main__':
 	#p.add_argument('--device', type=str, default="cpu")
 	args = p.parse_args()
 	args.device = 'cuda' if th.cuda.is_available() else 'cpu'
-	
+
 	data = PDBbindDataset(ids="%s/%s_ids.npy"%(args.data_dir, args.data_prefix),
 					  ligs="%s/%s_lig.pt"%(args.data_dir, args.data_prefix),
 					  prots="%s/%s_prot.pt"%(args.data_dir, args.data_prefix)
 					  )
-	
+
 	train_inds, val_inds = data.train_and_test_split(valnum=args.valnum, seed=args.seeds)
 	train_data = PDBbindDataset(ids=data.pdbids[train_inds],
 								ligs=data.gls[train_inds],
@@ -58,10 +58,10 @@ if __name__ == '__main__':
 								prots=data.gps[val_inds],
 								labels=data.labels[val_inds]
 								)
-	if args.encoder == "gt":		
-		ligmodel = GraphTransformer(in_channels=41, 
-									edge_features=10, 
-									num_hidden_channels=args.hidden_dim0, 
+	if args.encoder == "gt":
+		ligmodel = GraphTransformer(in_channels=41,
+									edge_features=10,
+									num_hidden_channels=args.hidden_dim0,
 									activ_fn=th.nn.SiLU(),
 									transformer_residual=True,
 									num_attention_heads=4,
@@ -69,10 +69,10 @@ if __name__ == '__main__':
 									dropout_rate=0.15,
 									num_layers=6
 									)
-		
-		protmodel = GraphTransformer(in_channels=41, 
-									edge_features=5, 
-									num_hidden_channels=args.hidden_dim0, 
+
+		protmodel = GraphTransformer(in_channels=41,
+									edge_features=5,
+									num_hidden_channels=args.hidden_dim0,
 									activ_fn=th.nn.SiLU(),
 									transformer_residual=True,
 									num_attention_heads=4,
@@ -80,19 +80,19 @@ if __name__ == '__main__':
 									dropout_rate=0.15,
 									num_layers=6
 									)
-	else:		
-		ligmodel = GatedGCN(in_channels=41, 
-							edge_features=10, 
-							num_hidden_channels=args.hidden_dim0, 
+	else:
+		ligmodel = GatedGCN(in_channels=41,
+							edge_features=10,
+							num_hidden_channels=args.hidden_dim0,
 							residual=True,
 							dropout_rate=0.15,
 							equivstable_pe=False,
 							num_layers=6
 							)
-		
-		protmodel = GatedGCN(in_channels=41, 
-							edge_features=5, 
-							num_hidden_channels=args.hidden_dim0, 
+
+		protmodel = GatedGCN(in_channels=41,
+							edge_features=5,
+							num_hidden_channels=args.hidden_dim0,
 							residual=True,
 							dropout_rate=0.15,
 							equivstable_pe=False,
