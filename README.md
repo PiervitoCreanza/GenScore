@@ -1,4 +1,22 @@
-# GenScore
+# Machine Learning for drug-target interaction estimation in Drug Discovery: from replication to data integration analysis
+This project focuses on the analysis and the retraining of a convolutional neural network,
+GenScore, designed to calculate the affinity degree (score) between a protein and a ligand. The main
+objective is to adapt this network to work with a new set of data produced by Politecnico di Milano.
+This new data has a distinctive feature: the pockets of the proteins have a smaller cutout compared to
+what was originally planned for the network. On one hand, this modification makes the data more
+manageable and less computationally burdensome; on the other hand, it becomes necessary to
+investigate how this model reacts to a stimulus so different from what was originally conceived for it.
+This requires a very patient and particularly meticulous examination of the new results produced, in
+order to understand their accuracy in terms of precision and efficiency. Through this retraining, we
+therefore hope to improve the ability of the network to work with different sizes of cutouts of the
+protein pockets, thus increasing its versatility and applicability in various scientific contexts. We hope
+that the results of this project, in our small contribution, may have significant implications for future
+research in the field of bioinformatics and computational chemistry.
+
+Read the full article here: [# Machine Learning for drug-target interaction estimation in Drug Discovery: from replication to data integration analysis]([https://link-url-here.org](https://polimi365-my.sharepoint.com/:b:/g/personal/10794727_polimi_it/EYnD7tjC1WdHrdeqHlCMQBcBPoxH7huPWohWtePMqVRNMQ?e=Hnh30a))
+
+---
+# GenScore (Original)
 GenScore is a generalized protein-ligand scoring framework extended from RTMScore, and it exhibits balanced scoring, ranking, docking and screening powers on multiple datasets.
 
 <div align=center>
